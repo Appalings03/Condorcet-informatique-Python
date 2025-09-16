@@ -1,0 +1,7 @@
+Ordinateur contient des micro-processeur 
+
+1 bit = 0 ou 1
+
+2 bits = 2^2 = 4
+3 bits = 2^3 = 8
+...
