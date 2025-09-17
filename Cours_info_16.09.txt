@@ -5,3 +5,23 @@ Ordinateur contient des micro-processeur
 2 bits = 2^2 = 4
 3 bits = 2^3 = 8
 ...
+Microprocesseur contient: 
+- UC (unité de commande); 
+- UAL (Unité arithmétique et logique);
+- Registres (prémémoire privé du MP);
+
+RAM (Random access Memory)
+Stack/Queue
+ROM (Read Only Memory)
+
+Assembler: ADD R1, R0
+language traduit: => programme
+- c
+- C++
+- java
+
+Language interpreter: 
+matlab / python => scripts
+
+c ou c++ necessite un compilateur
+python -> interpreteur
