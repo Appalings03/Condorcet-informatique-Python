@@ -1,0 +1,1 @@
+Var  => une adresse de la memoire dans laquelle il est possible de stocker une information
