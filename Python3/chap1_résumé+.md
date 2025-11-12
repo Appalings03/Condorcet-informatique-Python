@@ -156,7 +156,7 @@ Options courantes (raccourcis entre parenthèses) :
 - zorder — ordre de superposition (valeur numérique)
 - drawstyle — style de dessin ('default', 'steps-post', ...)
 
-Astuce rapide : on peut aussi passer une chaîne combinée courte, ex. plt.plot(x, y, 'ro--') => points rouges ('r') avec marqueurs 'o' et ligne en tirets '--'.
+*Astuce rapide : on peut aussi passer une chaîne combinée courte, ex. plt.plot(x, y, 'ro--') => points rouges ('r') avec marqueurs 'o' et ligne en tirets '--'.*
 
 - `plt.scatter()` — affiche des points individuels (nuage de points)
     ```python
@@ -234,8 +234,7 @@ Astuce rapide : on peut aussi passer une chaîne combinée courte, ex. plt.plot(
     plt.ylim(0, 35)
     ```
 
-    ## `plt.axis()` — limites et affichage des axes
-
+- `plt.axis()` — limites et affichage des axes
     - Bref : définit ou lit [xmin, xmax, ymin, ymax], ou change le mode d'affichage.
     - Usage courant :
         - plt.axis([xmin, xmax, ymin, ymax])
@@ -250,3 +249,113 @@ Astuce rapide : on peut aussi passer une chaîne combinée courte, ex. plt.plot(
     plt.show()
     ```
     *Astuce : pour un contrôle précis, utiliser ax = plt.gca(); ax.set_aspect('equal') puis plt.xlim()/plt.ylim() si besoin.*
+
+## Différence entre `def` et `lambda`
+
+- `def` — définit une fonction nommée avec un bloc d'instructions :
+    - Peut contenir plusieurs instructions, des boucles, des affectations.
+    - Supporte une docstring, des annotations de paramètres/retour et des décorateurs.
+    - Plus lisible pour les fonctions complexes.
+    - Exemple :
+        ```python
+        x=np.linspace(-1,1,2001)
+        def f(x):
+            """Renvoie x au carré"""
+            return x * x
+        
+        y = f(x)
+        plt.plot(x,y,"k")
+        ```
+
+- `lambda` — crée une fonction anonyme en une seule expression :
+    - Limité à une expression (pas d'instructions multiples), pas de docstring ni d'annotations.
+    - Utile pour des fonctions courtes et jetables (par ex. `key`, `map`, `filter`).
+    - Peut être affectée à une variable mais garde le nom interne `<lambda>`.
+    - Exemple :
+        ```python
+        x=np.linspace(-1,1,2001)
+        f = lambda x: x * x
+        plt.plot(x,f(x),"k")  
+        ```
+
+*Conseil : privilégier `def` pour la clarté et la maintenance ; utiliser `lambda` pour des opérations simples et locales.*
+
+
+
+## Fonctions Scipy.optimize
+
+- `scipy.optimize.fmin(func, x0, ...)` — minimise une fonction scalaire sans contrainte :
+    - Utilise l'algorithme de Nelder-Mead (simplexe).
+    - Ne nécessite pas de dérivée, robuste mais peut converger lentement.
+    - `x0` : point de départ (scalaire ou vecteur).
+    - Retourne le point minimisant (pas la valeur).
+    - Utile pour trouver des extrema locaux sans bornes.
+    - Exemple
+        ```python
+        from scipy.optimize import fmin
+        def f(x):
+            return (x-1.5)**2 + np.sin(5*x)
+
+        x_min = fmin(f, x0=0)[0]  # ≈ 1.5 ou point proche
+        print(f"Minimum en x ≈ {x_min:.4f}, f(x) = {f(x_min):.4f}")
+        ```
+
+- `scipy.optimize.fsolve(func, x0, ...)` — résout ( f(x) = 0 ) (système non linéaire) :
+    - Utilise une variante de Newton-Raphson ou hybride.
+    - `func` doit renvoyer zéro au point solution.
+    - `x0` : estimation initiale (scalaire ou tableau).
+    - Retourne les racines (zéros de la fonction).
+    - Idéal pour résoudre des équations transcendantes.
+    - Exemple :
+    ```python
+    from scipy.optimize import fsolve
+    def eq(x):
+        return np.sin(x**2) - np.exp(x)/4
+
+    racines = fsolve(eq, x0=[0.5, 1.0, 1.8])
+    print("Solutions :", racines)
+    ```
+
+    *Conseil : utiliser `fmin` pour l’optimisation locale sans dérivée ; `fsolve` pour résoudre des équations `( f(x)=0 )`.*
+
+## Fonctions Scipy.interpolate
+
+- `scipy.interpolate.interp1d(x, y, kind=... )` — interpolation 1D entre points connus :
+    - Crée une fonction interpolante à partir de données ((x_i, y_i)).
+    - `kind` : 'linear', 'nearest', 'cubic', 'quadratic', etc.
+    - Retourne une fonction callable pour évaluer entre les points.
+    - Gère l’extrapolation avec fill_value ou bounds_error.
+    - Exemple :
+        ```python
+        from scipy.interpolate import interp1d
+        x_data = [0, 1, 2, 3]
+        y_data = [0, 1, 0, 1]
+        f_interp = interp1d(x_data, y_data, kind='cubic')
+
+        x_fine = np.linspace(0, 3, 100)
+        plt.plot(x_data, y_data, 'o', label='données')
+        plt.plot(x_fine, f_interp(x_fine), '-', label='interpolation cubique')
+        plt.legend()
+        ```
+
+- `scipy.interpolate.griddata(points, values, xi, method=... )` — interpolation sur grille irrégulière (2D/3D) :
+    - Interpole des données éparpillées sur une grille régulière.
+    - `points` : coordonnées des données ((x_i, y_i)), values : (f(x_i, y_i)).
+    - `xi` : points où interpoler (grille).
+    - `method` : 'nearest', 'linear', 'cubic'.
+    - Utile en visualisation scientifique (ex : nuages de points → surface).
+    - Exemple :
+        ```python
+        from scipy.interpolate import griddata
+        points = np.random.rand(50, 2)
+        values = np.sin(points[:,0]*5) * np.cos(points[:,1]*5)
+
+        xi = np.mgrid[0:1:100j, 0:1:100j]
+        zi = griddata(points, values, xi.T, method='cubic')
+
+        plt.imshow(zi, extent=(0,1,0,1), origin='lower')
+        plt.scatter(points[:,0], points[:,1], c=values, edgecolors='k')
+        plt.colorbar()
+        ```
+
+*Conseil : interp1d pour des courbes 1D simples ; griddata pour des données éparpillées en 2D/3D.*
