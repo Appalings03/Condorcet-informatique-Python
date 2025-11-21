@@ -1,6 +1,6 @@
 # Cours informatique condorcet
 Python 3 
-## Points importants sur Python 3 Cours1
+## Points importants sur Python 3 chap 1
 
 [Consulter le Cours 1 sur Python 3](file:cours1.md)
 
@@ -37,5 +37,6 @@ Python 3
 ### Fonctions de matplotlib.pyplot
 - `plt.plot()`, `plt.scatter()`, `plt.bar()`, `plt.hist()`, `plt.xlabel()`, `plt.ylabel()`, `plt.title()`, `plt.legend()`, `plt.grid()`, `plt.show()`, `plt.savefig()`, `plt.figure()`, `plt.subplot()`, `plt.xlim()`, `plt.ylim()`
 
+###
 
-## Points importants sur Python 3 Cours2
+## Points importants sur Python 3 Chap2
