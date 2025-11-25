@@ -11,7 +11,7 @@ U = np.array([745, 744, 736, 729, 696, 615, 460, 331, 258, 187, 151, 98.6, 67.6,
 P = U * I
 
 # Domaine fin pour l'interpolation
-I_fine = np.linspace(0, 8, 1000)
+I_fine = np.linspace(I.min(), I.max(), 1000)
 
 # === 1. Graphe brut des 14 points de puissance ===
 plt.figure(figsize=(12, 8))
@@ -66,7 +66,7 @@ plt.ylabel('Puissance $P$ (µW)')
 plt.grid(True, alpha=0.5)
 plt.legend(fontsize=10)
 plt.xlim(0, 8)
-plt.ylim(0, 2200)
+plt.ylim(0, 4200)
 
 plt.tight_layout()
 plt.show()
