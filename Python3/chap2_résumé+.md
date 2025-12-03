@@ -100,3 +100,7 @@ print(A)
         -  `A.shape[0]` : Output nbre de ligne de la matrice => 3
     - `A.size` ou `np.size(A)` : donne le nombre d'élément de la matrice µ
 3. Transposée, inverse, déterminant
+
+## Format
+.2f
+.2e
