@@ -102,5 +102,5 @@ print(A)
 3. Transposée, inverse, déterminant
 
 ## Format
-.2f
-.2e
+- `.2f` : Format normale , 2 chiffres apres la virgule 
+- `.2e` : Format exponentielle, 2 chiffres apres la virgule 
